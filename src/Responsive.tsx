@@ -14,22 +14,31 @@ export default function useMediaQuery(obj: { query: string }) {
   return state;
 }
 
-export function MediaQuery(props: any) {
-  const query_array = [];
-  const orientation: string = props.orientation;
-  if (orientation) query_array.push("(orientation: " + orientation + ")");
-  const minWidth: string = props.minWidth;
-  if (minWidth) query_array.push("(min-width: " + minWidth + "px)");
-  const maxWidth: string = props.maxWidth;
-  if (maxWidth) query_array.push("(max-width: " + maxWidth + "px)");
-  const minHeight: string = props.minHeight;
-  if (minHeight) query_array.push("(min-height: " + minHeight + "px)");
-  const maxHeight: string = props.maxHeight;
-  if (maxHeight) query_array.push("(max-height: " + maxHeight + "px)");
-  // if (window.matchMedia("(max-height: " + maxHeight + ")").matches)
-  //   return <div>{props.children}</div>;
+interface MediaProps {
+  orientation?: string;
+  minWidth?: number;
+  maxWidth?: number;
+  minHeight?: number;
+  maxHeight?: number;
+  minResolution?: string | number;
+  maxResolution?: string | number;
+  children: React.ReactNode | ((matches: boolean) => React.ReactNode);
+}
 
-  const minResolution: string | number = props.minResolution;
+export function MediaQuery(props: MediaProps) {
+  const query_array = [];
+  const orientation = props.orientation;
+  if (orientation) query_array.push("(orientation: " + orientation + ")");
+  const minWidth = props.minWidth;
+  if (minWidth) query_array.push("(min-width: " + minWidth + "px)");
+  const maxWidth = props.maxWidth;
+  if (maxWidth) query_array.push("(max-width: " + maxWidth + "px)");
+  const minHeight = props.minHeight;
+  if (minHeight) query_array.push("(min-height: " + minHeight + "px)");
+  const maxHeight = props.maxHeight;
+  if (maxHeight) query_array.push("(max-height: " + maxHeight + "px)");
+
+  const minResolution = props.minResolution;
   if (minResolution)
     query_array.push(
       "(" +
@@ -40,7 +49,7 @@ export function MediaQuery(props: any) {
         minResolution +
         ")"
     );
-  const maxResolution: string | number = props.maxResolution;
+  const maxResolution = props.maxResolution;
   if (maxResolution)
     query_array.push(
       "(" +
@@ -53,9 +62,11 @@ export function MediaQuery(props: any) {
     );
 
   const query = query_array.join(" and ");
-  const res = useMediaQuery({ query: query });
-  // debugger;
-  if (!res) return null;
+  const matches = useMediaQuery({ query: query });
 
+  if (typeof props.children == "function")
+    return <div>{props.children(matches)}</div>;
+
+  if (!matches) return null;
   return <div>{props.children}</div>;
 }

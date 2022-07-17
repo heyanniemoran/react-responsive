@@ -31,7 +31,11 @@ export const Main = () => {
             <p>You also have a huge screen</p>
           </MediaQuery>
         </MediaQuery>
-        <MediaQuery minResolution="2dppx">123</MediaQuery>
+        <MediaQuery minResolution="1.5dppx">
+          {(matches) =>
+            matches ? <p>You are retina</p> : <p>You are not retina</p>
+          }
+        </MediaQuery>
       </div>
     </div>
   );
