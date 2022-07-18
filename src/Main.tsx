@@ -1,5 +1,8 @@
 import React from "react";
-import useMediaQuery, { MediaQuery } from "./Responsive";
+// import useMediaQuery, { MediaQuery } from "./Responsive";
+import useMediaQuery, {
+  MediaQuery,
+} from "@heyanniemoran/responsive-media-query";
 
 export const Main = () => {
   const isDesktopOrLaptop: boolean = useMediaQuery({
